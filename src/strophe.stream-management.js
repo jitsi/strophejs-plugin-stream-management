@@ -274,8 +274,17 @@ Strophe.addConnectionPlugin('streamManagement', {
 			this._c.jid = this._storedJid;
 
 			// Restore Strophe handlers
-			for (const property in this._resumeState) {
-				this._c[property] = this._resumeState[property];
+			for (const h of (this._resumeState.handlers || [])
+					.concat(this._resumeState.addHandlers || [])) {
+				this._c._addSysHandler(h.handler, h.ns, h.name, h.type, h.id);
+			}
+			for (const h of (this._resumeState.timedHandlers || [])
+					.concat(this._resumeState.addTimeds)) {
+				this._c.addTimedHandler(h.period, h.handler);
+			}
+			for (const h of (this._resumeState.removeTimeds || [])
+					.concat(this._resumeState.removeHandlers || [])) {
+				this._c.deleteTimedHandler(h);
 			}
 
 			// FIXME check conditions if there's session ID and if enabled
