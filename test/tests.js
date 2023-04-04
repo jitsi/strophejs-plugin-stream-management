@@ -9,7 +9,6 @@ const dom = new JSDOM();
 global.document = dom.window.document;
 global.DOMParser = new JSDOM().window.DOMParser;
 
-require('jquery')(dom.window)
 const { Strophe } = require('strophe.js');
 require('../lib/strophe.stream-management');
 const MockServer = require('./MockServer.js');
